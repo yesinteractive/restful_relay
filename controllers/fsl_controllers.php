@@ -8,33 +8,57 @@
 
 function process_time(){
    $time = number_format( microtime(true) - LIM_START_MICROTIME, 6);
-  return("<BR>Controller Function Called: " .  option('routecallback') . "<BR>Request processed in $time seconds");
+  //return("<BR>Controller Function Called: " .  option('routecallback') . "<BR>Request processed in $time seconds");
+  return $time;
 }
 
   function hello_world()
   {
-    
-    fsl_session_set('crop','Yummy Limonade');
-    set_or_default('name', params('who'), "everybody");
-    $time = number_format( microtime(true) - LIM_START_MICROTIME, 6);
-   
-    return html("Session Data Set: Yummy Limonade<BR>". process_time());
+     $arr = array('Error' => "You must provide a valid endpoint.");
+   // status(202); //returns HTTP status code of 202
+    status(500); //returns HTTP status code of 202
+    return json($arr);
   }
 
 /*
 *
-* This is an example on how to create and decode JWT Tokens
+* create jwt token
+* key
+* id
 *
 */
 
   function jwt()
   {
+    
+     if ((isset($_POST['key'])) && (!empty($_POST['key']))) {
+
+        $key = $_POST['key'];
+    } else {
+           $arr = array('Error' => "No key provided.");
+    status(500); //returns HTTP status code of 202
+    return json($arr); 
+     }
+    
+         if ((isset($_POST['id'])) && (!empty($_POST['id']))) {
+
+        $id = $_POST['id'];
+    } else {
+           $arr = array('Error' => "No ID provided.");
+    status(500); //returns HTTP status code of 202
+    return json($arr); 
+     }
+    
    $token = array();
-   $token['id'] = "test123";
-   $testjwt =  fsl_jwt_encode($token, "testkey");
-   $jwtdecode = fsl_jwt_decode($testjwt,"testkey");
-   $time = number_format( microtime(true) - LIM_START_MICROTIME, 6); 
-    return html("Token To Encode: " . $token['id'] ." <BR>JWT: $testjwt<BR>Decoded JWT: " . $jwtdecode->id . "<BR>". process_time());
+   $token['id'] = "$id";
+   $token['iat'] = time();
+   $testjwt =  fsl_jwt_encode($token, "$key");
+   $jwtdecode = fsl_jwt_decode($testjwt,"$key");
+   $time = process_time(); 
+   $arr = array('Response' => array('Status' => "Success", 'JWT' => $testjwt, 'ID' => $id, 'Processing Time' => $time));
+        status(200); //returns HTTP status code of 202
+    return json($arr);
+  //  return html("Token To Encode: " . $token['id'] ." <BR>JWT: $testjwt<BR>Decoded JWT: " . $jwtdecode->id . "<BR>". process_time());
   }
 
 /*

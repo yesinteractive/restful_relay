@@ -43,9 +43,15 @@ dispatch('/', 'hello_world');
 //example showing a json REST response
 dispatch('/api', 'api');
 
-//example showing JWT usage
-dispatch('/jwt', 'jwt');
+//dispatch_post('/ftp', 'ftp');
+//dispatch_post('/ssh', 'ssh');
+//dispatch_post('/smtp', 'smtp');
+//dispatch_post('/fan', 'fan');
 
+//example showing JWT usage
+dispatch_post('/jwt', 'jwt');
+
+/*
 //show session 
 dispatch('/showip/:what/:who', 'showip');
    
@@ -66,7 +72,7 @@ dispatch('/images/:name/:size', 'image_show');
  
 
 dispatch('/*.jpg/:size', 'image_show_jpeg_only');
- 
+ */
 
 ##############################################################################
 #  run after function
@@ -127,12 +133,23 @@ function html_welcome($vars){ extract($vars);?>
 # custom error declaration
 ##############################################################################
 # 
-// Custom 404 error example
-/*function not_found($errno, $errstr, $errfile, $errline){ 
+// Custom 404 
+function not_found($errno, $errstr, $errfile, $errline){ 
      
- echo "<center><img src=" . url_for('//_lim_public/img/404.gif') . " border=0><BR><BR>Your request for" . $errstr . " came up ghosts.</center>"  ;  
+     $arr = array('Error' => "$errno $errstr Not Found");
+   // status(202); //returns HTTP status code of 202
+    status(404); //returns HTTP status code of 202
+    return json($arr);
 } 
-*/
+// Custom 500
+function server_error($errno, $errstr, $errfile, $errline){ 
+ 
+     $arr = array('Error' => "$errno $errstr ");
+   // status(202); //returns HTTP status code of 202
+    status(500); //returns HTTP status code of 202
+    return json($arr);
+} 
+
 
 
 ?>
