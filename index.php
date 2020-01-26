@@ -44,7 +44,7 @@ dispatch('/', 'hello_world');
 dispatch('/api', 'api');
 
 //dispatch_post('/ftp', 'ftp');
-//dispatch_post('/ssh', 'ssh');
+dispatch_post('/ssh', 'ssh');
 //dispatch_post('/smtp', 'smtp');
 //dispatch_post('/fan', 'fan');
 

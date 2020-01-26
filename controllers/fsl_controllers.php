@@ -63,6 +63,49 @@ function process_time(){
 
 /*
 *
+* RUN SSH COMMMAND
+* server
+* user
+* pass
+* command
+*
+*/
+
+  function ssh()
+  {
+         if ((isset($_POST['server'])) && (!empty($_POST['server'])) && (isset($_POST['user'])) && (!empty($_POST['user'])) && (isset($_POST['pass'])) && (!empty($_POST['pass'])) && (isset($_POST['command'])) && (!empty($_POST['command']))) {
+
+        $server = $_POST['server'];
+                   $user = $_POST['user'];
+                   $pass = $_POST['pass'];
+                   $command = $_POST['command'];
+    } else {
+           $arr = array('Error' => "server, user, pass and command variables are all mandatory.");
+    status(500); //returns HTTP status code of 202
+    return json($arr); 
+     }
+    
+    
+   
+    $ssh = new Net_SSH2($server);
+     if (!$ssh->login($user, $pass)) {
+                    $arr = array('Error' => "Login failed. Check server or credentials.");
+    status(401); //returns HTTP status code of 202
+    return json($arr); 
+     }
+ 
+     $result =  $ssh->exec($command);
+   $time = process_time(); 
+   $arr = array('Response' => array('Status' => "Success", 'Response' => $result, 'Processing Time' => $time));
+  //  $arr = array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5);
+   // status(202); //returns HTTP status code of 202
+    status(200); //returns HTTP status code of 202
+    return json($arr);
+  }
+
+
+/*
+*
 * This is an example on how to make a RESTful JSON Response and Set A Status Code
 *
 */

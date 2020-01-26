@@ -372,6 +372,7 @@ function run($env = null)
                                    // X-LIGHTTPD-SEND-FILE: for Apache and Lighttpd v. < 1.5
 	option('config_dir',          file_path($root_dir, 'config'));
 	require_once_dir(option('config_dir'));
+  
 //  require_once file_path($root_dir, 'config').  '/fsl_config.php';
   # 1. Set handlers
   # 1.1 Set error handling
