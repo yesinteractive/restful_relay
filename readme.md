@@ -1,9 +1,10 @@
 # Restful Relay
 
-Restful Relay is a PHP Based Microservice that relays remote FTP, SSH, SMTP, POP, IMAP, DNS, Telnet commands through a RESTful interface. Microservice also can create JWT tokens as well as conduct request fanning. This utility works great in combination with API Gateway solutions such as Kong (konghq.com). 
+Restful Relay is a PHP Based Microservice that relays remote SFTP, SSH, SMTP, POP, IMAP, DNS, Telnet commands through a RESTful interface. Microservice also can create JWT tokens as well as conduct request fanning. This utility works great in combination with API Gateway solutions such as Kong (konghq.com). 
 
 Documentation:
 - [SSH](#ssh)
+- [SFTP](#sftp)
 - [JWT Creation](#jwt)
 - Other protocols and utlities coming soon
 
@@ -45,6 +46,82 @@ Runs SSH command on remote server. Only currently supports username password aut
   }
 }
 ```
+
+
+
+<a name="sftp"> </a>
+## SFTP Commands
+Runs SSH command on remote server. Only currently supports username password authentication. 
+
+### SFTP Get
+
+**URL** : `/sftp/get`
+
+**Method** : `POST`
+
+**Parameters**
+
+| Name        | Description |
+| ----------- | ----------- |
+| server      | Server to connect to (ie: localhost, somedomain.com, etc.) |
+| user        | sftp Username  |
+| pass        | sftp Password |
+| filename    | filename to fetch   |
+| dir         | OPTIONAL. directory of file. will use default logged in dir if not set  |
+
+**Auth required** : NO
+
+### Success Response
+
+**HTTPie Request** : ```http -f POST /sftp/get server=localhost user=myuser pass=mypass filename='example.txt'```
+
+**Respones Code** : `200 OK`
+
+```json
+{
+  "Response": {
+    "Status": "Success",
+    "Response": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+    "Processing Time": "0.173307"
+  }
+}
+```
+### SFTP Put
+Will return true if put sucessful, false if failed.
+
+**URL** : `/sftp/put`
+
+**Method** : `POST`
+
+**Parameters**
+
+| Name        | Description |
+| ----------- | ----------- |
+| server      | Server to connect to (ie: localhost, somedomain.com, etc.) |
+| user        | sftp Username  |
+| pass        | sftp Password |
+| filename    | filename to save   |
+| data        | data/text to save to file   |
+| dir         | OPTIONAL. directory of file. will use default logged in dir if not set  |
+
+**Auth required** : NO
+
+### Success Response
+
+**HTTPie Request** : ```http -f POST /sftp/put server=localhost user=myuser pass=mypass data='sample text' filename='example.txt'```
+
+**Respones Code** : `200 OK`
+
+```json
+{
+  "Response": {
+    "Status": "Success",
+    "Response": true,
+    "Processing Time": "0.177481"
+  }
+}
+```
+
 
 
 
