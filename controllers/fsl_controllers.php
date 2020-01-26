@@ -103,6 +103,88 @@ function process_time(){
     return json($arr);
   }
 
+/*
+*
+* RUN sftp COMMMAND
+* server
+* user
+* pass
+* command
+* filename
+* data
+*
+*/
+
+  function sftp()
+  {
+         if ((isset($_POST['server'])) && (!empty($_POST['server'])) && (isset($_POST['user'])) && (!empty($_POST['user'])) && (isset($_POST['pass'])) && (!empty($_POST['pass'])) ) {
+
+        $server = $_POST['server'];
+                   $user = $_POST['user'];
+                   $pass = $_POST['pass'];
+                   $command = $_POST['command'];
+    } else {
+           $arr = array('Error' => "server, user, pass  variables are all mandatory.");
+    status(500); //returns HTTP status code of 202
+    return json($arr); 
+     }
+    
+    if  (empty(params('command')))  {
+                    $arr = array('Error' => "Missing a transfer command (get, put, etc.)");
+    status(401); //returns HTTP status code of 202
+    return json($arr); 
+}
+    
+    
+   
+  $sftp = new NET_SFTP($server);
+if (!$sftp->login($user, $pass )) {
+                    $arr = array('Error' => "Login failed. Check server or credentials.");
+    status(401); //returns HTTP status code of 202
+    return json($arr); 
+}
+
+// puts a three-byte file named filename.remote on the SFTP server
+//$result = $sftp->put('filename.remote', 'xxx');
+     
+     if ((isset($_POST['dir'])) && (!empty($_POST['dir'])))
+           $sftp->chdir($_POST['dir']); 
+    
+    $result =   $sftp->pwd();
+    if (params('command') == 'put'){
+          $result =   $sftp->put($_POST['filename'], $_POST['data']);
+    }
+    elseif (params('command') == 'get') {
+          $result =    $sftp->get($_POST['filename']);
+    }
+    else{
+        $arr = array('Error' => "invalid command " . params('command'));
+    status(500); //returns HTTP status code of 202
+    return json($arr); 
+    }
+ //  print_r($sftp->nlist());
+// puts an x-byte file named filename.remote on the SFTP server,
+// where x is the size of filename.local
+//$sftp->put('filename.remote', 'filename.local', SFTP::SOURCE_LOCAL_FILE);
+    
+     $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+    if($check !== false) {
+        echo "File is an image - " . $check["mime"] . ".";
+        $uploadOk = 1;
+    } else {
+        echo "File is not an image.";
+        $uploadOk = 0;
+    }
+    
+   $time = process_time(); 
+   $arr = array('Response' => array('Status' => "Success", 'Response' => $result, 'Processing Time' => $time));
+  //  $arr = array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5);
+   // status(202); //returns HTTP status code of 202
+    status(200); //returns HTTP status code of 202
+    return json($arr);
+  }
+
+
 
 /*
 *

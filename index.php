@@ -43,7 +43,7 @@ dispatch('/', 'hello_world');
 //example showing a json REST response
 dispatch('/api', 'api');
 
-//dispatch_post('/ftp', 'ftp');
+dispatch_post('/ftp/:command', 'sftp');
 dispatch_post('/ssh', 'ssh');
 //dispatch_post('/smtp', 'smtp');
 //dispatch_post('/fan', 'fan');
