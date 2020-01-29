@@ -5,6 +5,7 @@ Restful Relay is a PHP Based Microservice that relays remote SFTP, SSH, SMTP, PO
 Documentation:
 - [SSH](#ssh)
 - [SFTP](#sftp)
+- [SMTP](#smtp)
 - [JWT Creation](#jwt)
 - Other protocols and utlities coming soon
 
@@ -122,7 +123,49 @@ Will return true if put sucessful, false if failed.
 }
 ```
 
+---
 
+<a name="smtp"> </a>
+## SMTP - Send Mail
+
+
+Sends mail via smtp. Only currently supports username password authentication.
+
+**URL** : `/mailer`
+
+**Method** : `POST`
+
+**Parameters**
+
+| Name        | Description |
+| ----------- | ----------- |
+| server      | SMtp Server to connect to (ie: localhost, somedomain.com, etc.) |
+| user        | smtp Username  |
+| pass        | smtp Password |
+| port     | smtp server port   |
+| from        | from email address - sender|
+| from_name       | from name |
+| to      | to email address - recipient  |
+| subject        | message subject |
+| body     | message body - text only currently   |
+
+
+**Auth required** : NO
+
+### Success Response
+
+**HTTPie Request** : ```http -f POST /mailer server=localhost user=myuser pass=mypass port=587 from=sender@fqdn from_name=bob to=recipient@fqdn subject=hello body=world ```
+
+**Respones Code** : `200 OK`
+
+```json
+{
+  "Response": {
+    "Status": "Message send successfully.",
+    "Processing Time": "1.202658"
+  }
+}
+```
 
 
 
