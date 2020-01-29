@@ -1,5 +1,8 @@
 <?php
-
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+require 'vendor/autoload.php';   
 /*
 *
 *   Sample controller functions showcased on FSL Launch Page
@@ -60,6 +63,117 @@ function process_time(){
     return json($arr);
   //  return html("Token To Encode: " . $token['id'] ." <BR>JWT: $testjwt<BR>Decoded JWT: " . $jwtdecode->id . "<BR>". process_time());
   }
+
+
+
+
+/*
+*
+* send mail COMMMAND
+* server
+* user
+* pass
+* port
+* from
+* to
+* subject
+* body
+*
+*/
+
+  function mailer()
+  {
+           if ((isset($_POST['server'])) 
+             && (!empty($_POST['server'])) 
+             && (isset($_POST['user'])) 
+             && (!empty($_POST['user'])) 
+             && (isset($_POST['pass'])) 
+             && (!empty($_POST['pass']))
+             && (isset($_POST['port'])) 
+             && (!empty($_POST['port'])) 
+             && (isset($_POST['subject'])) 
+             && (!empty($_POST['subject'])) 
+             && (isset($_POST['body'])) 
+             && (!empty($_POST['body']))             
+             && (isset($_POST['from_name'])) 
+             && (!empty($_POST['from_name'])) 
+               && (isset($_POST['from'])) 
+             && (!empty($_POST['from']))             
+             && (isset($_POST['to'])) 
+             && (!empty($_POST['to']))) {
+
+        $server = $_POST['server'];
+                   $user = $_POST['user'];
+                   $pass = $_POST['pass'];
+                  
+    } else {
+           $arr = array('Error' => "server, user, pass and command variables are all mandatory.");
+    status(500); //returns HTTP status code of 202
+    return json($arr); 
+     }
+    
+ 
+    //PHPMailer Object
+$mail = new PHPMailer;
+    //Enable SMTP debugging. 
+//$mail->SMTPDebug = 3;    
+    $mail->SMTPDebug = false;
+//Set PHPMailer to use SMTP.
+$mail->isSMTP();            
+//Set SMTP host name                          
+$mail->Host = $_POST['server'];
+//Set this to true if SMTP host requires authentication to send email
+$mail->SMTPAuth = true;                          
+//Provide username and password     
+$mail->Username = $_POST['user'];                 
+$mail->Password = $_POST['pass'];                           
+//If SMTP requires TLS encryption then set it
+$mail->SMTPSecure = "tls";                           
+//Set TCP port to connect to 
+$mail->Port = $_POST['port']; //default to 587 if not provided
+//From email address and name5
+$mail->From = $_POST['from']; 
+$mail->FromName = $_POST['from_name'];
+
+//To address and name
+//$mail->addAddress("recepient1@example.com", "Recepient Name");
+$mail->addAddress($_POST['to']); //Recipient name is optional
+
+//Address to which recipient will reply
+//$mail->addReplyTo("reply@yesllc.io", "Reply");
+
+//CC and BCC
+//$mail->addCC("cc@example.com");
+//$mail->addBCC("bcc@example.com");
+
+//Send HTML or Plain Text email
+$mail->isHTML(false);
+
+$mail->Subject = $_POST['subject']; ;
+$mail->Body = $_POST['body']; ;
+//$mail->AltBody = "This is the plain text version of the email content";
+
+if(!$mail->send()) 
+{
+    $arr = array('Error' => $mail->ErrorInfo);
+    status(401); //returns HTTP status code of 202
+    return json($arr); 
+} 
+else 
+{
+           
+   $time = process_time(); 
+   $arr = array('Response' => array('Status' => "Message send successfully.", 'Processing Time' => $time));
+    status(200); //returns HTTP status code of 202
+    return json($arr); 
+}
+   
+ 
+  }
+
+
+
+
 
 /*
 *
