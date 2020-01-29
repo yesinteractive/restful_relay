@@ -1,6 +1,6 @@
 # Restful Relay
 
-Restful Relay is a PHP Based Microservice that relays remote SFTP, SSH, SMTP, POP, IMAP, DNS, Telnet commands through a RESTful interface. Microservice also can create JWT tokens as well as conduct request fanning. This utility works great in combination with API Gateway solutions such as Kong (konghq.com). 
+Restful Relay is a PHP Based Microservice that relays remote SFTP, SSH, SMTP commands through a RESTful interface. Microservice also can create JWT tokens as well as conduct request fanning. This utility works great in combination with API Gateway solution such as Kong (konghq.com), in a Kubernetes cluster, or a service mesh.
 
 Documentation:
 - [SSH](#ssh)
