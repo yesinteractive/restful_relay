@@ -47,6 +47,7 @@ dispatch('/api', 'api');
 dispatch_post('/ftp/:command', 'sftp');
 dispatch_post('/ssh', 'ssh');
 dispatch_post('/mailer', 'mailer');
+dispatch_post('/fan', 'fanning');
 //dispatch_post('/smtp', 'smtp');
 //dispatch_post('/fan', 'fan');
 
