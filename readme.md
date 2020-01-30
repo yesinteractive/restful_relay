@@ -213,7 +213,7 @@ Generate a JWT token. Claims returned in token will consist of id and iat.
 ## Request Fanning
 
 Fans a single request into multiple requests and then conslidate responses to one JSON Response. Please note that 
-this function assumes that the upstream responses from each URL specified will be JSON based.
+this function assumes that the upstream responses from each URL specified will be JSON based. URL Requests are run concurrently for better speed rather than in a serial fashion which would cause greater latency.
 
 **URL** : `/fan`
 
