@@ -1,0 +1,12 @@
+# docker compose example
+# exposes restful_relay service on port 8081
+# example command: docker-compose up
+---
+version: '3'
+services:
+  dadjokes:
+    image: docker.io/yesinteractive/restfulrelay
+    container_name: restful_relay
+    restart: always
+    ports:
+      - "8081:80"
