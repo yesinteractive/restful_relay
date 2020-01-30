@@ -1,0 +1,65 @@
+# yaml configuration for kong for kubernetes
+# creates ingress rule /restfulrelay for restfulrelay service 
+# applies an example rate limit policy using Kong's KongPlugin CRD
+# learn about the Kong Ingress Controller at https://github.com/Kong/kubernetes-ingress-controller
+# usage: kubectl apply -f restfulrelay_kong_for_k8s.yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: restfulrelay
+  labels:
+    app: restfulrelay
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  selector:
+    app: restfulrelay
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restfulrelay
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: restfulrelay
+  template:
+    metadata:
+      labels:
+        app: restfulrelay
+    spec:
+      containers:
+      - image: docker.io/yesinteractive/restfulrelay
+        name: restfulrelay
+        ports:
+        - containerPort: 80
+---
+kind: KongPlugin
+apiVersion: configuration.konghq.com/v1
+metadata:
+  name: ratelimit-restfulrelay
+config:
+  minute: 60
+  limit_by: ip
+  policy: local
+plugin: rate-limiting
+ 
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: restfulrelay-route
+  annotations:
+   plugins.konghq.com: ratelimit-restfulrelay
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /restfulrelay
+        backend:
+          serviceName: restfulrelay
+          servicePort: 80
