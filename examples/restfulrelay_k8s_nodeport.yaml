@@ -1,0 +1,37 @@
+# restfulrelay service yaml configuration for kubernetes
+# exposes NodePort Service with auto assigned nodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: restfulrelay
+  labels:
+    app: restfulrelay
+spec:
+  type: NodePort
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  selector:
+    app: restfulrelay
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restfulrelay
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: restfulrelay
+  template:
+    metadata:
+      labels:
+        app: restfulrelay
+    spec:
+      containers:
+      - image: docker.io/yesinteractive/restfulrelay
+        name: restfulrelay
+        ports:
+        - containerPort: 80
