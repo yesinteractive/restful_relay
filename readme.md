@@ -246,7 +246,7 @@ See example below. To perform an HTTP Get, simply list the URL. If you would lik
 
 ### Success Response
 
-**HTTPie Request** : ```http -f POST /fan age:=29 married:=false hobbies:='["http", "pies"]' ```
+**HTTPie Request** : ```http -f POST /fan <json pay load goes here> ```
 
 **Respones Code** : `200 OK`
 
