@@ -1,6 +1,6 @@
 # docker compose example
 # exposes restful_relay service on port 8081
-# example command: docker-compose up
+# example command:  docker-compose -f docker-compose.yml up
 ---
 version: '3'
 services:
