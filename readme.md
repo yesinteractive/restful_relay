@@ -5,6 +5,7 @@
 Restful Relay is a PHP Based Microservice that relays remote SFTP, SSH, SMTP commands through a RESTful interface. Microservice also can create JWT tokens as well as conduct request fanning. This utility works great in combination with API Gateway solution such as Kong (konghq.com), in a Kubernetes cluster, or a service mesh.
 
 Documentation:
+- [Installation and Deployment](#install)
 - [SSH](#ssh)
 - [SFTP](#sftp)
 - [SMTP](#smtp)
@@ -13,6 +14,29 @@ Documentation:
 - Other protocols and utlities coming soon
 
 ---
+<a name="install"> </a>
+## Installation and Deployment Examples
+
+See usage examples for Kubernetes, Kong for Kubernetes Ingress Controller, and docker-compose in the [examples directory folder.](https://github.com/yesinteractive/restful_relay/blob/master/examples)
+
+### With Docker
+
+Docker image is Alpine 3.9 based running on Apache. The containter exposes both ports 80 an 443 with a self signed certificated. If you wish to alter the container configuration, feel free to use the Dockerfile in this repo (https://github.com/yesinteractive/restful_relay/blob/master/Dockerfile). Otherwise, you can pull the latest image from DockerHub with the following command:
+```
+docker pull yesinteractive/restfulrelay
+```
+Typical basic usage:
+
+```
+docker run -it yesinteractive/restfulrelay
+```
+
+Typical usage in Dockerfile:
+
+```
+FROM yesinteractive/restfulrelay
+RUN echo <your commands here>
+```
 
 <a name="ssh"> </a>
 ## SSH Command
