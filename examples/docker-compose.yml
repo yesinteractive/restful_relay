@@ -1,5 +1,5 @@
 # docker compose example
-# exposes restful_relay service on port 8081
+# exposes restful_relay service on port 8083
 # example command:  docker-compose -f docker-compose.yml up
 ---
 version: '3'
@@ -9,4 +9,4 @@ services:
     container_name: restful_relay
     restart: always
     ports:
-      - "8081:80"
+      - "8083:443"
