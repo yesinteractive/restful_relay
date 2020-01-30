@@ -9,6 +9,7 @@ Documentation:
 - [SFTP](#sftp)
 - [SMTP](#smtp)
 - [JWT Creation](#jwt)
+- [Request Fanning](#fan)
 - Other protocols and utlities coming soon
 
 ---
@@ -205,6 +206,78 @@ Generate a JWT token. Claims returned in token will consist of id and iat.
   }
 }
 ```
+
+
+
+<a name="fan"> </a>
+## Request Fanning
+
+Fans a single request into multiple requests and then conslidate responses to one JSON Response. Please note that 
+this function assumes that the upstream responses from each URL specified will be JSON based.
+
+**URL** : `/fan`
+
+**Method** : `POST`
+
+**Request Data Content Type Must Be application/json**
+
+See example below. To perform an HTTP Get, simply list the URL. If you would like to perform a post, pass the post data in a group named 'post'. Example below is showing 3 requests - 2 GETs and 1 POST.
+
+```json
+[
+  {
+    "url": "http://dummy.restapiexample.com/api/v1/employees"
+  },
+  {
+    "url": "http://dummy.restapiexample.com/api/v1/employees"
+  },
+  {
+    "url": "http://dummy.restapiexample.com/api/v1/create",
+    "post": {
+      "appid": "YahooDemo",
+      "output": "php",
+      "context": "test"
+    }
+  }
+]
+```
+
+**Auth required** : NO
+
+### Success Response
+
+**HTTPie Request** : ```http -f POST /fan age:=29 married:=false hobbies:='["http", "pies"]' ```
+
+**Respones Code** : `200 OK`
+
+```json
+[
+  {
+    "status": "success",
+    "data": [
+      {
+        "id": "24",
+        "employee_name": "Doris Wilder",
+        "employee_salary": "85600",
+        "employee_age": "23",
+        "profile_image": ""
+      }
+    ]
+  },
+  {
+    "status": "success",
+    "data": {
+      "name": null,
+      "salary": null,
+      "age": null,
+      "id": 84
+    }
+  }
+]
+```
+
+
+
 
 ## Notes
 
